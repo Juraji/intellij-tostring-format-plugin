@@ -4,7 +4,11 @@
     <vendor email="github@juraji.nl" url="https://github.com/Juraji">Juraji</vendor>
 
     <description><![CDATA[
-    Adds an action that will format Java's standard #toString() output, making it more readable.
+    Adds an action that will format Java's standard #toString() output to JSON-like.<br />
+    <br />
+    Usage:Open a Scratch or select some code that has Java #toString() output then run "Format Java ToString to Json" from the Actions pop-up.
+    <br />
+    <i>Note: This plugin uses simple lex-replacement to convert output, it might not work as expected for all cases.</i>
     ]]></description>
 
     <!-- please see https://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/plugin_compatibility.html
@@ -17,5 +21,6 @@
 
     <actions>
         <!-- Add your actions here -->
+        <action id="FormatJavaToStringToJson" class="nl.juraji.intellij.FormatJavaToStringToJsonAction" text="Format Java ToString to Json"/>
     </actions>
 </idea-plugin>
