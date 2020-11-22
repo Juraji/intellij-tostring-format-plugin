@@ -1,5 +1,6 @@
 package nl.juraji.intellij.formatter
 
+import org.junit.Assert.assertNotEquals
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 
@@ -154,5 +155,90 @@ internal class JavaToStringToJsonFormatterTest {
         val result: String = formatter.format(input)
 
         assertEquals(expected, result)
+    }
+
+    @Test
+    internal fun `should support Kotlin data class toString in list`() {
+        val input = "[DataClass(map={key=value}, value=Some value), DataClass(map={key=value}, value=Some value), DataClass(map={key=value}, value=Some value)]"
+        val expected = """
+            [
+              "DataClass": {
+                "map": {
+                  "key": "value"
+                },
+                "value": "Some value"
+              },
+              "DataClass": {
+                "map": {
+                  "key": "value"
+                },
+                "value": "Some value"
+              },
+              "DataClass": {
+                "map": {
+                  "key": "value"
+                },
+                "value": "Some value"
+              }
+            ]
+        """.trimIndent()
+
+        val result: String = formatter.format(input)
+
+        assertEquals(expected, result)
+    }
+
+    @Test
+    internal fun `should support Kotlin data class toString in map`() {
+        val input = "{data=DataClass(map={key=value}, value=Some value)}"
+        val expected = """
+            {
+              "data": "DataClass": {
+                "map": {
+                  "key": "value"
+                },
+                "value": "Some value"
+              }
+            }
+        """.trimIndent()
+
+        val result: String = formatter.format(input)
+
+        assertEquals(expected, result)
+    }
+
+    @Test
+    internal fun `should support Kotlin data class toString in data class`() {
+        val input = "DataClass(value=DataClass(map={key=value}, value=Some value))"
+        val expected = """
+            {
+              "DataClass": {
+                "value": "DataClass": {
+                  "map": {
+                    "key": "value"
+                  },
+                  "value": "Some value"
+                }
+              }
+            }
+        """.trimIndent()
+
+        val result: String = formatter.format(input)
+
+        assertEquals(expected, result)
+    }
+
+    @Test
+    internal fun `does not support structure characters in map values`() {
+        val input = "{key=Value (with) structure [characters] = working}"
+        val expected = """
+           {
+             "key": "Value (with) structure [characters] = working"
+           }
+        """.trimIndent()
+
+        val result: String = formatter.format(input)
+
+        assertNotEquals(expected, result)
     }
 }
